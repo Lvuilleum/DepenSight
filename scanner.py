@@ -27,7 +27,3 @@ def findDependence(fileName):
 def findFile(directoryName):
     return list(pathlib.Path(directoryName).rglob("*.py"))
 
-
-fileNames = findFile(".")
-for i in fileNames:
-    print(findDependence(i))
