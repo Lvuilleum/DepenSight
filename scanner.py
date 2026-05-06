@@ -1,5 +1,6 @@
 import ast 
 import pathlib
+import numpy as np 
 
 # This file is the crawler that looks through the project you want to analyze.
 # We want to look in the directory of the file and look only at the dependence of the files. 

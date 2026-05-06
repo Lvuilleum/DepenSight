@@ -2,6 +2,8 @@
 import scanner
 import graph_manager
 import visualizer
+import analyzer
+import os
 
 def run_visualizer(target_directory):
     files = scanner.findFile(target_directory)
@@ -11,13 +13,16 @@ def run_visualizer(target_directory):
     for file_path in files:
         deps = scanner.findDependence(file_path)
 
-        graph_manager.addModuleNode(G, file_path.name, is_local=True)
+        clean_name = file_path.stem
+        graph_manager.addModuleNode(G, clean_name, is_local=True)
 
         for d in deps:
             graph_manager.addModuleNode(G, d, is_local=False)
-            graph_manager.addDependence(G, file_path.name, d)
+            graph_manager.addDependence(G, clean_name, d)
     
-    visualizer.saveGraph(G, "dependencies.html")
+    report = analyzer.check_health(G)
+    visualizer.saveGraph(G, "dependencies.html", report=report)
+    
 
 if __name__ == "__main__":
     run_visualizer(".")
