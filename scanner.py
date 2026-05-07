@@ -7,20 +7,28 @@ import numpy as np
 
 # find all the dependency in a .py file
 def findDependence(fileName):
-    with open(fileName, 'r') as f:
-        sourceCode = f.read()
+    try:
+        with open(fileName, 'r') as f:
+            sourceCode = f.read()
 
-    imported_list = []
-    tree = ast.parse(sourceCode)
+        imported_list = []
+        tree = ast.parse(sourceCode)
 
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            for alias in node.names:
-                imported_list.append(alias.name)
-        if isinstance(node, ast.ImportFrom):
-            if node.module:
-                imported_list.append(node.module)
-    return imported_list
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    imported_list.append(alias.name)
+            if isinstance(node, ast.ImportFrom):
+                if node.module:
+                    imported_list.append(node.module)
+        return imported_list
+    except SyntaxError:
+        print(f"⚠️ Erreur de syntaxe ignorée dans : {fileName}")
+        return [] # On renvoie une liste vide si le fichier est illisible
+    except Exception as e:
+        print(f"❌ Erreur lors de la lecture de {fileName} : {e}")
+        return []
+
 
 
 # find all file in a directory
